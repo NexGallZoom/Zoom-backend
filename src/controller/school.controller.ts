@@ -42,4 +42,38 @@ router.post('/', (req, res) => {
   return res.status(201).json(); //생성이 성공 됬을떄
 });
 
+router.put('/:schoolId', (req, res) => {
+  const { schoolId } = req.params;
+  if (!schoolId) {
+    return res.status(400).json();
+  }
+
+  const schoolIdNumber: number = parseInt(schoolId, 10);
+  if (!data.some(({ id }) => id === schoolIdNumber)) {
+    return res.status(404).json();
+  }
+  const school: School = req.body as School;
+  if (school.id !== schoolIdNumber) {
+    return res.status(400).json();
+  }
+
+  const index: number = data.findIndex((existSchool: School) => existSchool.id === schoolIdNumber);
+  data[index] = school;
+  return res.status(200).json();
+});
+
+router.delete('/:schoolId', (req, res) => {
+  const { schoolId } = req.params;
+  if (!schoolId) {
+    return res.status(400).json();
+  }
+  const schoolIdNumber: number = parseInt(schoolId, 10);
+  if (!data.some(({ id }) => id === schoolIdNumber)) {
+    return res.status(404).json();
+  }
+  const index: number = data.findIndex((school: School) => school.id === schoolIdNumber);
+  data.splice(index, 1);
+  return res.status(200).json();
+});
+
 export default router;
