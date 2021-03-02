@@ -1,14 +1,18 @@
 import bodyParser from 'body-parser';
-import express from 'express'
-import { createServer , Server} from 'http';
+import express from 'express';
+import { createServer, Server } from 'http';
 
 import controller from './controller';
+import { initWebSocket } from './middleware/socket';
 
 const app = express();
 
 app.use(bodyParser.json());
-app.use(controller)
+app.use(controller);
 
-const server = createServer(app);
-server.listen(process.env.PORT || 5000);
+const server: Server = createServer(app);
+initWebSocket(server);
 
+server.listen(process.env.PORT || 5000, () => {
+  console.log('server initialized');
+});
