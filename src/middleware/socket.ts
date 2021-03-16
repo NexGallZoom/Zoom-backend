@@ -3,6 +3,7 @@ import websocket from 'socket.io';
 
 import { ChatEvent } from '../types/chat';
 
+const messageList: string[] = [];
 let socket: websocket.Server;
 
 export const initWebSocket = (server: Server): void => {
@@ -16,9 +17,11 @@ export const initWebSocket = (server: Server): void => {
     console.log('connected', client.id);
     client.join('zoom');
     client.on(ChatEvent.NEW_MESSAGE, (message: string) => {
-      //console.log(message);
+      messageList.push(message);
       socket.to('zoom').emit(ChatEvent.GET_MESSAGE, message);
     });
+    console.log(messageList);
+    client.emit(ChatEvent.GET_ALL_MESSAGE, messageList);
   });
   socket.on(ChatEvent.DISCONNECT, () => {
     console.log('closed');
