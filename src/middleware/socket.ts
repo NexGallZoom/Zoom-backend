@@ -18,7 +18,6 @@ export const initWebSocket = (server: Server): void => {
     client.join('zoom');
     client.on(ChatEvent.NEW_MESSAGE, (message: string) => {
       messageList.push(message);
-      console.log(messageList);
       socket.to('zoom').emit(ChatEvent.GET_MESSAGE, message);
     });
     console.log(messageList);
