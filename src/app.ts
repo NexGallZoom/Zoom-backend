@@ -2,7 +2,6 @@ import bodyParser from 'body-parser';
 import express from 'express';
 import https from 'https';
 import fs from 'fs';
-import { createServer, Server } from 'http';
 
 import * as path from 'path';
 import controller from './controller';
@@ -21,9 +20,8 @@ const httpsServer = https.createServer(options, app);
 app.use(bodyParser.json());
 app.use(controller);
 
-const server: Server = createServer(app);
-initWebSocket(server);
+initWebSocket(httpsServer);
 
-server.listen(process.env.PORT || 5000, () => {
+httpsServer.listen(process.env.PORT || 5000, () => {
   console.log('server initialized');
 });
